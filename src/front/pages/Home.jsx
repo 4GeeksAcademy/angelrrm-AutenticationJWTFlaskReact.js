@@ -1,52 +1,46 @@
 import React, { useEffect } from "react"
 import rigoImageUrl from "../assets/img/rigo-baby.jpg";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+import { Link } from "react-router-dom";
 
 export const Home = () => {
+    const token = sessionStorage.getItem("token");
 
-	const { store, dispatch } = useGlobalReducer()
+    return (
+        <div className="container text-center mt-5">
+            <h1 className="display-4 fw-bold text-primary mb-4">
+                ¡Bienvenido a tu App con Autenticación JWT!
+            </h1>
 
-	const loadMessage = async () => {
-		try {
-			const backendUrl = import.meta.env.VITE_BACKEND_URL
+            <p className="lead mb-4">
+                Esta aplicación demuestra cómo funciona la autenticación con tokens JWT usando Flask + React.
+            </p>
 
-			if (!backendUrl) throw new Error("VITE_BACKEND_URL is not defined in .env file")
+            <div className="d-flex justify-content-center gap-3 flex-wrap">
 
-			const response = await fetch(backendUrl + "/api/hello")
-			const data = await response.json()
-
-			if (response.ok) dispatch({ type: "set_hello", payload: data.message })
-
-			return data
-
-		} catch (error) {
-			if (error.message) throw new Error(
-				`Could not fetch the message from the backend.
-				Please check if the backend is running and the backend port is public.`
-			);
-		}
-
-	}
-
-	useEffect(() => {
-		loadMessage()
-	}, [])
-
-	return (
-		<div className="text-center mt-5">
-			<h1 className="display-4">Hello Rigo!!</h1>
-			<p className="lead">
-				<img src={rigoImageUrl} className="img-fluid rounded-circle mb-3" alt="Rigo Baby" />
-			</p>
-			<div className="alert alert-info">
-				{store.message ? (
-					<span>{store.message}</span>
-				) : (
-					<span className="text-danger">
-						Loading message from the backend (make sure your python 🐍 backend is running)...
-					</span>
-				)}
-			</div>
-		</div>
-	);
-}; 
+                {!token ? (
+                    <>
+                        <Link to="/login">
+                            <button className="btn btn-primary">Iniciar sesión</button>
+                        </Link>
+                        <Link to="/signup">
+                            <button className="btn btn-success">Registrarse</button>
+                        </Link>
+                    </>
+                ) : (
+                    <>
+                        <Link to="/private">
+                            <button className="btn btn-warning">Ir al área privada</button>
+                        </Link>
+                        <button className="btn btn-danger" onClick={() => {
+                            sessionStorage.removeItem("token");
+                            window.location.reload();
+                        }}>
+                            Cerrar sesión
+                        </button>
+                    </>
+                )}
+            </div>
+        </div>
+    );
+};

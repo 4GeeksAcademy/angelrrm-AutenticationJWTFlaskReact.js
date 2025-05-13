@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 export const Private = () => {
   const [message, setMessage] = useState(null);
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_BACKEND_URL
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
@@ -15,7 +16,7 @@ export const Private = () => {
     }
 
     // Token existe -> hacemos fetch a ruta protegida
-    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/private`, {
+    fetch(API_URL + "api/private", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`

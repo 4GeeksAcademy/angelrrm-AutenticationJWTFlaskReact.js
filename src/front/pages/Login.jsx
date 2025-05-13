@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+const API_URL = import.meta.env.VITE_BACKEND_URL
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -9,8 +9,10 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
+
+    
     try {
-      const resp = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/token`, {
+      const resp = await fetch(API_URL + "api/token", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

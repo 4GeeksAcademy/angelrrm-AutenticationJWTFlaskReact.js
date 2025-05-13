@@ -5,12 +5,13 @@ export const Signup = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const API_URL = import.meta.env.VITE_BACKEND_URL
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const resp = await fetch(process.env.BACKEND_URL + "/api/signup", {
+            const resp = await fetch(API_URL + "api/signup", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password })
@@ -47,7 +48,7 @@ export const Signup = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
-                <button className="btn btn-success">Registrarse</button>
+                <button type="submit" className="btn btn-success">Registrarse</button>
             </form>
         </div>
     );
